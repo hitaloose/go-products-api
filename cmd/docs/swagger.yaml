@@ -1,0 +1,82 @@
+basePath: /api/v1
+definitions:
+  dtos.CreateProductDto:
+    properties:
+      category:
+        type: string
+      description:
+        type: string
+      name:
+        type: string
+      price:
+        type: number
+      stock:
+        type: integer
+    type: object
+  dtos.ProductResponseDto:
+    properties:
+      product:
+        $ref: '#/definitions/models.Product'
+    type: object
+  models.Product:
+    properties:
+      category:
+        type: string
+      created_at:
+        type: string
+      description:
+        type: string
+      id:
+        type: integer
+      name:
+        type: string
+      price:
+        type: number
+      stock:
+        type: integer
+      updated_at:
+        type: string
+    type: object
+externalDocs:
+  description: OpenAPI
+  url: https://swagger.io/resources/open-api/
+host: localhost:8080
+info:
+  contact:
+    email: hitaloose@gmail.com
+    name: Hitalo Loose
+    url: https://github.com/hitaloose
+  description: A modern, lightweight API for product management built with Go and
+    the Gin framework. Features clean architecture, mocked repositories, validation,
+    and custom error handling for a seamless development experience.
+  license:
+    name: Apache 2.0
+    url: http://www.apache.org/licenses/LICENSE-2.0.html
+  termsOfService: http://swagger.io/terms/
+  title: Go Products API
+  version: "1.0"
+paths:
+  /product:
+    post:
+      operationId: CreateProduct
+      parameters:
+      - description: body
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/dtos.CreateProductDto'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            $ref: '#/definitions/dtos.ProductResponseDto'
+      summary: Create a new product
+      tags:
+      - Product
+securityDefinitions:
+  BasicAuth:
+    type: basic
+swagger: "2.0"

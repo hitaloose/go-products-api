@@ -18,15 +18,22 @@ func NewProductController() *ProductController {
 	}
 }
 
+// @Tags Product
+// @Router /product  [post]
+// @Summary Create a new product
+// @ID CreateProduct
+// @Param request body dtos.CreateProductDto true "body"
+// @Produce json
+// @Success 201 {object} dtos.ProductResponseDto
 func (controller ProductController) Create(context *gin.Context) {
 	var body dtos.CreateProductDto
 
-	if err := helpers.BindJSON(context, body); err != nil {
+	if err := helpers.BindJSON(context, &body); err != nil {
 		exceptions.GinExceptionHandler(context, err)
 		return
 	}
 
-	if err := helpers.ValidateStruct(body); err != nil {
+	if err := helpers.ValidateStruct(&body); err != nil {
 		exceptions.GinExceptionHandler(context, err)
 		return
 	}

@@ -28,7 +28,7 @@ func (repository MockedProductRepository) Create(product *models.Product) (*mode
 	repository.nextId++
 
 	product.ID = repository.nextId
-	product.CreatedAt = time.Now().GoString()
+	product.CreatedAt = time.Now().Format(time.RFC3339)
 
 	repository.products[product.ID] = product
 

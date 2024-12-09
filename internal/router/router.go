@@ -2,6 +2,8 @@ package router
 
 import "github.com/gin-gonic/gin"
 
-func SetupRouter(router *gin.Engine) {
-	SetupProductRouter(router)
+func SetupRouter(server *gin.Engine) {
+	v1 := server.Group("/api/v1")
+
+	SetupProductRouter(v1)
 }

@@ -5,7 +5,7 @@ import (
 	"github.com/hitaloose/go-products-api/internal/controllers"
 )
 
-func SetupProductRouter(router *gin.Engine) {
+func SetupProductRouter(router *gin.RouterGroup) {
 	productController := controllers.NewProductController()
 
 	router.POST("/product", productController.Create)
