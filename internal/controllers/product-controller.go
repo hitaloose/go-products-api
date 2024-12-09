@@ -9,12 +9,14 @@ import (
 )
 
 type ProductController struct {
-	createProductService services.CreateProductService
+	createService       services.CreateProductService
+	getByFiltersService services.GetProductsByFilterService
 }
 
 func NewProductController() *ProductController {
 	return &ProductController{
-		createProductService: *services.NewCreateProductService(),
+		createService:       *services.NewCreateProductService(),
+		getByFiltersService: *services.NewGetProductsByFilterService(),
 	}
 }
 
@@ -38,11 +40,41 @@ func (controller ProductController) Create(context *gin.Context) {
 		return
 	}
 
-	product, err := controller.createProductService.Run(body)
+	product, err := controller.createService.Run(body)
 	if err != nil {
 		exceptions.GinExceptionHandler(context, err)
 		return
 	}
 
 	helpers.ReplyCreated(context, gin.H{"product": product})
+}
+
+// @Tags Product
+// @Router /product  [get]
+// @Summary Create all products by filters
+// @ID GetAllProducts
+// @Param title query string false "title"
+// @Param stock query string false "stock"
+// @Produce json
+// @Success 200 {object} dtos.ProductsResponseDto
+func (controller ProductController) GetAll(context *gin.Context) {
+	var queries dtos.ProductFilterDto
+
+	if err := helpers.BindQuery(context, &queries); err != nil {
+		exceptions.GinExceptionHandler(context, err)
+		return
+	}
+
+	if err := helpers.ValidateStruct(&queries); err != nil {
+		exceptions.GinExceptionHandler(context, err)
+		return
+	}
+
+	products, err := controller.getByFiltersService.Run(queries)
+	if err != nil {
+		exceptions.GinExceptionHandler(context, err)
+		return
+	}
+
+	helpers.ReplyOK(context, gin.H{"products": products})
 }

@@ -25,6 +25,38 @@ const docTemplate = `{
     "basePath": "{{.BasePath}}",
     "paths": {
         "/product": {
+            "get": {
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Product"
+                ],
+                "summary": "Create all products by filters",
+                "operationId": "GetAllProducts",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "title",
+                        "name": "title",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "stock",
+                        "name": "stock",
+                        "in": "query"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/dtos.ProductsResponseDto"
+                        }
+                    }
+                }
+            },
             "post": {
                 "produces": [
                     "application/json"
@@ -82,6 +114,17 @@ const docTemplate = `{
             "properties": {
                 "product": {
                     "$ref": "#/definitions/models.Product"
+                }
+            }
+        },
+        "dtos.ProductsResponseDto": {
+            "type": "object",
+            "properties": {
+                "products": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/models.Product"
+                    }
                 }
             }
         },

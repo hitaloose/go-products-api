@@ -3,6 +3,7 @@ package repositories
 import (
 	"time"
 
+	"github.com/hitaloose/go-products-api/internal/dtos"
 	"github.com/hitaloose/go-products-api/internal/models"
 )
 
@@ -24,7 +25,7 @@ func NewMockedProductRepository() *MockedProductRepository {
 	return mockedProductRepository
 }
 
-func (repository MockedProductRepository) Create(product *models.Product) (*models.Product, error) {
+func (repository *MockedProductRepository) Create(product *models.Product) (*models.Product, error) {
 	repository.nextId++
 
 	product.ID = repository.nextId
@@ -33,4 +34,25 @@ func (repository MockedProductRepository) Create(product *models.Product) (*mode
 	repository.products[product.ID] = product
 
 	return product, nil
+}
+
+func (repository *MockedProductRepository) filterProducts(filters *dtos.ProductFilterDto) []*models.Product {
+	var result []*models.Product
+
+	for _, product := range repository.products {
+		if filters.Name != nil && *filters.Name != product.Name {
+			continue
+		}
+		if filters.Stock != nil && *filters.Stock != product.Stock {
+			continue
+		}
+
+		result = append(result, product)
+	}
+
+	return result
+}
+
+func (repository *MockedProductRepository) GetAll(filters *dtos.ProductFilterDto) ([]*models.Product, error) {
+	return repository.filterProducts(filters), nil
 }

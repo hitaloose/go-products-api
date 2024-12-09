@@ -18,6 +18,13 @@ definitions:
       product:
         $ref: '#/definitions/models.Product'
     type: object
+  dtos.ProductsResponseDto:
+    properties:
+      products:
+        items:
+          $ref: '#/definitions/models.Product'
+        type: array
+    type: object
   models.Product:
     properties:
       category:
@@ -57,6 +64,27 @@ info:
   version: "1.0"
 paths:
   /product:
+    get:
+      operationId: GetAllProducts
+      parameters:
+      - description: title
+        in: query
+        name: title
+        type: string
+      - description: stock
+        in: query
+        name: stock
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/dtos.ProductsResponseDto'
+      summary: Create all products by filters
+      tags:
+      - Product
     post:
       operationId: CreateProduct
       parameters:

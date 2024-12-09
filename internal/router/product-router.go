@@ -9,4 +9,5 @@ func SetupProductRouter(router *gin.RouterGroup) {
 	productController := controllers.NewProductController()
 
 	router.POST("/product", productController.Create)
+	router.GET("/product", productController.GetAll)
 }
